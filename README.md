@@ -1,4 +1,4 @@
-![alt text](https://github.com/Fanfar1c/eyeBlink_check/blob/main/test2.PNG)
+![alt text](https://github.com/Fanfar1c/eyeBlink_check/blob/main/test2.png)
 
 > **Программа на стадий разработки**
 
