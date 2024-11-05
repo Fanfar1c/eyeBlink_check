@@ -1,26 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convert Image to Base64</title>
-    <script>
-        function handleFileSelect(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const base64String = e.target.result.split(',')[1];
-                    // Отправка строки Base64 обратно в Thunkable через WebViewer
-                    window.ReactNativeWebView.postMessage(base64String);
-                };
-                reader.readAsDataURL(file);
-            }
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript">
+var ThunkableWebviewerExtension = {
+    postMessage: function (message) {
+        if (window.ReactNativeWebView) {
+            window.ReactNativeWebView.postMessage(message);
+        } else {
+            window.parent.postMessage(message, '*');
         }
-    </script>
+    },
+    receiveMessage: function(fxn) {
+        var callbackFunction = function(event) {
+            if (typeof fxn === 'function') {
+                fxn(event.data)
+            }
+        };
+        document.addEventListener('message', callbackFunction, false);
+        window.addEventListener('message', callbackFunction, false);
+    }
+}
+</script>
 </head>
 <body>
-    <h2>Select an Image to Convert to Base64</h2>
-    <input type="file" accept="image/*" onchange="handleFileSelect(event)">
+<script type="text/javascript">
+var test;
+var value;
+ThunkableWebviewerExtension.receiveMessage(function(message) {
+    value = message;
+    encoded = btoa(value);
+    ThunkableWebviewerExtension.postMessage(encoded);
+});
+</script>
 </body>
 </html>
